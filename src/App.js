@@ -2,33 +2,29 @@ import React, { useState } from "react";
 
 import { useForm, ErrorMessage } from "react-hook-form";
 
+import "./App.css";
+
 const pricePerBox = 20;
 
 const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 export default function App() {
-  const [user, setUser] = useState({
-    name: "",
-    address: "",
-    stock: 0,
-    email: "",
-    received: false,
-  });
+  const [user, setUser] = useState();
+  const [received, setReceived] = useState(false);
 
   const { register, errors, handleSubmit } = useForm();
 
   const onSubmit = (data) => {
-    const receivedUser = { ...data, received: true };
-    const assignUser = Object.assign(user, receivedUser);
-    setUser(assignUser);
+    setUser({ ...data, ...user });
+    setReceived(true);
   };
 
   return (
-    <div>
+    <div className="App">
       <h2>Cool Drink Order Form</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         Name:
-        <input name="name" ref={register({ required: "This is required" })} />
+        <input name="name" ref={register({ required: "Name is required" })} />
         <br />
         <ErrorMessage errors={errors} name="name">
           {({ message }) => (
@@ -39,17 +35,17 @@ export default function App() {
         </ErrorMessage>
         <br />
         <label>Address:</label>
-        <textarea
-          type="TextArea"
+        <input
+          type="text"
           name="address"
           ref={register({
             required: {
               value: true,
-              message: "This is required",
+              message: "Address is required",
             },
             maxLength: {
               value: 100,
-              message: "input exceeds maximum limit",
+              message: "Your address exceeds maximum limit",
             },
           })}
         />
@@ -64,13 +60,14 @@ export default function App() {
         <br />
         Boxes needed:
         <input
-          placeholder="minimum value should be 50"
+          placeholder="please enter atleast 50"
           type="number"
           name="stock"
           ref={register({
             min: {
               value: 50,
-              message: "value should be minimum 50",
+              message:
+                "please order minimum 50 boxes, otherwise order will not placed",
             },
           })}
         />
@@ -87,8 +84,14 @@ export default function App() {
         <input
           name="email"
           ref={register({
-            required: "This is required",
-            pattern: emailPattern,
+            required: {
+              value: true,
+              message: "Email is required",
+            },
+            pattern: {
+              value: emailPattern,
+              message: "Email does not match the pattern",
+            },
           })}
         />
         <br />
@@ -102,10 +105,8 @@ export default function App() {
         <br />
         <input type="submit" />
       </form>
-      {user.received && (
-        <p>order received, stock will be sent to {user.address}</p>
-      )}
-      {user.received && (
+      {received && <p>order received, stock will be sent to {user.address}</p>}
+      {received && (
         <p>
           The total price of ordered boxes is {pricePerBox * user.stock}(in
           dollars)
