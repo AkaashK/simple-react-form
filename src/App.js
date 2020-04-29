@@ -9,7 +9,7 @@ const pricePerBox = 20;
 const emailPattern = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 export default function App() {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
   const [received, setReceived] = useState(false);
 
   const { register, errors, handleSubmit } = useForm();
@@ -104,13 +104,23 @@ export default function App() {
         </ErrorMessage>
         <br />
         <input type="submit" />
+        <br />
+        <input
+          type="reset"
+          onClick={() => {
+            setReceived(false);
+            setUser({});
+          }}
+        />
       </form>
-      {received && <p>order received, stock will be sent to {user.address}</p>}
       {received && (
-        <p>
-          The total price of ordered boxes is {pricePerBox * user.stock}(in
-          dollars)
-        </p>
+        <>
+          <p>order received, stock will be sent to {user.address}</p>
+          <p>
+            The total price of ordered boxes is {pricePerBox * user.stock}(in
+            dollars)
+          </p>
+        </>
       )}
     </div>
   );
