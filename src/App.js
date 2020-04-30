@@ -23,7 +23,7 @@ export default function App() {
     <div className="App">
       <h2>Cool Drink Order Form</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
-        Name:
+        <label htmlFor="name">Name: </label>
         <input name="name" ref={register({ required: "Name is required" })} />
         <br />
         <ErrorMessage errors={errors} name="name">
@@ -34,7 +34,7 @@ export default function App() {
           )}
         </ErrorMessage>
         <br />
-        <label>Address:</label>
+        <label htmlFor="address">Address: </label>
         <input
           type="text"
           name="address"
@@ -58,7 +58,7 @@ export default function App() {
           )}
         </ErrorMessage>
         <br />
-        Boxes needed:
+        <label htmlFor="stock">Boxes Needed: </label>
         <input
           placeholder="please enter atleast 50"
           type="number"
@@ -80,7 +80,7 @@ export default function App() {
           )}
         </ErrorMessage>
         <br />
-        email:
+        <label htmlFor="email">Email: </label>
         <input
           name="email"
           ref={register({
@@ -104,6 +104,7 @@ export default function App() {
         </ErrorMessage>
         <br />
         <input type="submit" />
+        <br />
         <br />
         <input
           type="reset"
